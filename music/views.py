@@ -2,10 +2,14 @@ from django.views import generic
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.core.urlresolvers import reverse_lazy
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Album
+from .models import Album, Song
 from django.contrib.auth import authenticate, login
 from django.views.generic import View
 from.forms import UserForm
+
+
+def get_all_albums():
+    return Album.objects.all()
 
 
 class IndexView(generic.ListView):
@@ -13,7 +17,7 @@ class IndexView(generic.ListView):
     context_object_name = 'all_albums'
 
     def get_queryset(self):
-        return Album.objects.all()
+        return get_all_albums
 
 
 class DetailView(generic.DetailView):
@@ -29,6 +33,7 @@ class AlbumCreate(CreateView):
 
 class AlbumUpdate(UpdateView):
     model = Album
+    template_name = 'music/album-form.html'
     fields = ['artist', 'album_title', 'genre', 'album_logo']
 
 
@@ -72,16 +77,36 @@ class UserFormView(View):
         return render(request, self.template_name, {'form': form})
 
 
-def favorite(request, album_id):
-    album = get_object_or_404(Album, pk=album_id)
+def favorite(request, song_id):
+    song = get_object_or_404(Song, pk=song_id)
     try:
-        selected_song = album.song_set.get(pk=request.POST['song'])
+        if song.is_favorite:
+            song.is_favorite = False
+        else:
+            song.is_favorite = True
+        song.save()
     except(KeyError, Song.DoesNotExist):
         return render(request, 'music/detail.html',{
-            'album': album,
+            'album': song.id,
             'error_message': "You did not select a valid song",
         })
     else:
-        selected_song.is_favorite = True
-        selected_song.save()
-        return render(request, 'music/detail.html', {'album': album})
+        return render(request, 'music/detail.html', {'album': song.album})
+
+
+def favorite_album(request, album_id):
+
+    album = get_object_or_404(Album, pk=album_id)
+    try:
+        if album.is_favorite:
+            album.is_favorite = False
+        else:
+            album.is_favorite = True
+        album.save()
+    except(KeyError, Album.DoesNotExist):
+        return render(request, 'music/index.html',{
+            'album': album.id,
+            'error_message': "You did not select a valid album",
+        })
+    else:
+        return render(request, 'music/index.html', {'all_albums': get_all_albums})

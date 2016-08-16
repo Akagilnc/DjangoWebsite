@@ -47,9 +47,10 @@
                             <thead>
                             <tr>
                                 <th>Title</th>
+                                <th>Artist</th>
                                 <th>Audio File</th>
                                 <th>Favorite</th>
-                                <th>Actions</th>
+
                             </tr>
                             </thead>
                             <tbody>
@@ -57,6 +58,9 @@
                                 <tr>
                                     <td>
                                         <h4>{{ song.song_title }}</h4>
+                                    </td>
+                                    <td>
+                                        <h5>{{ album.artist }}</h5>
                                     </td>
                                     <td>
                                         <a target="_blank" href="{{ song.audio_file.url }}">
@@ -68,21 +72,12 @@
 
                                     <td>
                                         <a href="{% url 'music:favorite' song.id %}" class="btn-favorite" name="song">
-
                                             <span class="glyphicon glyphicon-star {% if song.is_favorite %} active {% endif %}"></span>
 
                                         </a>
                                     </td>
 
-                                    <td>
-                                        <form action="#" method="post" style="display: inline;">
-                                            {% csrf_token %}
-                                            <input type="hidden" name="song_id" value="{{ song.id }}"/>
-                                            <button type="submit" class="btn btn-danger">
-                                                <span class="glyphicon glyphicon-remove"></span>&nbsp; Delete
-                                            </button>
-                                        </form>
-                                    </td>
+
 
                                 </tr>
                             {% endfor%}
