@@ -3,6 +3,7 @@ from django import forms
 
 from .models import Album, Song
 
+
 class AlbumForm(forms.ModelForm):
 
     class Meta:

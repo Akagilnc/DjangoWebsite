@@ -47,7 +47,7 @@
                             <thead>
                             <tr>
                                 <th>Title</th>
-                                <th>Artist</th>
+                                <th></th>
                                 <th>Audio File</th>
                                 <th>Favorite</th>
 
@@ -60,7 +60,7 @@
                                         <h4>{{ song.song_title }}</h4>
                                     </td>
                                     <td>
-                                        <h5>{{ album.artist }}</h5>
+                                        <span class="glyphicon glyphicon-heart"></span>
                                     </td>
                                     <td>
                                         <a target="_blank" href="{{ song.audio_file.url }}">
