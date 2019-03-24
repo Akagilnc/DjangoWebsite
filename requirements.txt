@@ -11,3 +11,4 @@ scipy>=0.17.1
 six>=1.10.0
 virtualenv>=15.0.1
 XlsxWriter>=0.8.7
+django
